@@ -1,18 +1,23 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
+	"github.com/encounter1987/quantum-kv/gen/go/kv"
 	"github.com/encounter1987/quantum-kv/quantumdb"
 	grpcServer "github.com/encounter1987/quantum-kv/server/grpc"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"os"
+	"os/signal"
 )
 
 // Command line defaults
 const (
-	DefaultGRPCAddr = "localhost:1001"
-	DefaultRaftAddr = "localhost:2001"
+	DefaultGRPCAddr = "localhost:11001"
+	DefaultRaftAddr = "localhost:12001"
 )
 
 // Command line parameters
@@ -62,4 +67,39 @@ func main() {
 		log.Fatalf("failed to start gRPC server: %s", err.Error())
 	}
 
+	// If join was specified, make the join request.
+	if joinAddr != "" {
+		if err := join(joinAddr, raftAddr, nodeID); err != nil {
+			log.Fatalf("failed to join node at %s: %s", joinAddr, err.Error())
+		}
+	}
+
+	// quantum-kv is up and running!
+	log.Printf("quantum-kv started successfully, listening on http://%s", grpcAddr)
+
+	terminate := make(chan os.Signal, 1)
+	signal.Notify(terminate, os.Interrupt)
+	<-terminate
+	log.Println("quantum-kv exiting")
+
+}
+
+func join(joinAddr, raftAddr, nodeID string) error {
+	conn, err := grpc.Dial(joinAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return fmt.Errorf("failed to connect to join address %s: %w", joinAddr, err)
+	}
+	defer conn.Close()
+
+	client := kv.NewKeyValueStoreClient(conn)
+
+	_, err = client.AddNode(context.Background(), &kv.AddNodeRequest{
+		NodeId:  nodeID,
+		Address: raftAddr,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to add node to cluster: %w", err)
+	}
+
+	return nil
 }

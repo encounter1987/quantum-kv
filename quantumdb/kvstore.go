@@ -41,8 +41,10 @@ type KVStore struct {
 
 func NewKVStore(raftDir, raftBind string) *KVStore {
 	return &KVStore{
-		kv:     make(map[string]string),
-		logger: log.New(os.Stderr, "[kvstore] ", log.LstdFlags),
+		RaftDirectory: raftDir,
+		RaftBind:      raftBind,
+		kv:            make(map[string]string),
+		logger:        log.New(os.Stderr, "[kvstore] ", log.LstdFlags),
 	}
 }
 
@@ -52,12 +54,14 @@ func (db *KVStore) Open(enableSingle bool, localID string) error {
 
 	addr, err := net.ResolveTCPAddr("tcp", db.RaftBind)
 	if err != nil {
-		return err
+		return fmt.Errorf("Failed to resolve raft address: %s", err.Error())
 	}
 
+	fmt.Println(db.RaftBind)
+	fmt.Println(addr)
 	transport, err := raft.NewTCPTransport(db.RaftBind, addr, 3, time.Second, os.Stderr)
 	if err != nil {
-		return err
+		return fmt.Errorf("Failed to create raft transport: %s", err.Error())
 	}
 
 	snapshotStore, err := raft.NewFileSnapshotStore(db.RaftDirectory, 2, os.Stderr)
@@ -68,14 +72,14 @@ func (db *KVStore) Open(enableSingle bool, localID string) error {
 	var logStore raft.LogStore
 	var stableStore raft.StableStore
 
-	boltDB, error := raftboltdb.New(
+	boltDB, err := raftboltdb.New(
 		raftboltdb.Options{
 			Path: filepath.Join(db.RaftDirectory, "raft.db"),
 		})
 	logStore = boltDB
 	stableStore = boltDB
 
-	if error != nil {
+	if err != nil {
 		return fmt.Errorf("error initiallizing bolt store: %s", err)
 	}
 
