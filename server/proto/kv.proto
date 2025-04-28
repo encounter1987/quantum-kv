@@ -7,6 +7,9 @@ option go_package = "gen/go/kv";
 service KeyValueStore {
   rpc SetValue(SetRequest) returns (SetResponse);
   rpc GetValue(GetRequest) returns (GetResponse);
+  rpc DeleteValue(DeleteRequest) returns (DeleteResponse);
+  rpc Status(StatusRequest) returns (StatusResponse);
+  rpc AddNode(AddNodeRequest) returns (AddNodeResponse);
 }
 
 message SetRequest {
@@ -25,4 +28,36 @@ message GetRequest {
 message GetResponse {
   string value = 1;
   bool found = 2;
+}
+
+message DeleteRequest {
+  string key = 1;
+}
+
+message DeleteResponse {
+  bool success = 1;
+}
+
+message StatusRequest {
+}
+
+message Node {
+  string id = 1;
+  string address = 2;
+}
+
+message StatusResponse {
+  Node myId = 1;
+  Node leader = 2;
+  repeated Node followers = 3;
+}
+
+message AddNodeRequest {
+  string nodeId = 1;
+  string address = 2;
+}
+
+message AddNodeResponse {
+  bool success = 1;
+  string error = 2;
 }

@@ -1,42 +1,88 @@
-package main
+package server
 
 import (
-	"context"
-	"log"
-	"time"
-
-	pb "github.com/encounter1987/quantum-kv/gen/go/kv"
+	"fmt"
+	"github.com/encounter1987/quantum-kv/gen/go/kv"
+	"github.com/encounter1987/quantum-kv/quantumdb"
+	"golang.org/x/net/context"
 	"google.golang.org/grpc"
+	"net"
 )
 
-func main() {
-	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure(), grpc.WithBlock())
+type DBServer struct {
+	kv.UnimplementedKeyValueStoreServer
+	KVStore *quantumdb.KVStore
+}
+
+func New(store *quantumdb.KVStore) *DBServer {
+	return &DBServer{
+		KVStore: store,
+	}
+}
+
+func (s *DBServer) SetValue(ctx context.Context, req *kv.SetRequest) (*kv.SetResponse, error) {
+	s.KVStore.Set(req.Key, req.Value)
+
+	return &kv.SetResponse{Success: true}, nil
+}
+
+func (s *DBServer) GetValue(ctx context.Context, req *kv.GetRequest) (*kv.GetResponse, error) {
+	value, found, _ := s.KVStore.Get(req.Key)
+
+	return &kv.GetResponse{Value: value, Found: found}, nil
+}
+
+func (s *DBServer) DeleteValue(ctx context.Context, req *kv.DeleteRequest) (*kv.DeleteResponse, error) {
+	s.KVStore.Delete(req.Key)
+
+	return &kv.DeleteResponse{Success: true}, nil
+}
+
+func (s *DBServer) AddNode(ctx context.Context, req *kv.AddNodeRequest) (*kv.AddNodeResponse, error) {
+	err := s.KVStore.AddNode(req.NodeId, req.Address)
 	if err != nil {
-		log.Fatalf("Did not connect: %v", err)
+		return nil, err
 	}
-	defer conn.Close()
 
-	c := pb.NewKeyValueStoreClient(conn)
+	return &kv.AddNodeResponse{Success: true}, nil
+}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-
-	// Set a value
-	_, err = c.SetValue(ctx, &pb.SetRequest{Key: "foo", Value: "bar"})
+func (s *DBServer) Status(ctx context.Context, req *kv.StatusRequest) (*kv.StatusResponse, error) {
+	status, err := s.KVStore.Status()
 	if err != nil {
-		log.Fatalf("Could not set value: %v", err)
+		return nil, err
 	}
-	log.Println("Set value")
 
-	// Get a value
-	res, err := c.GetValue(ctx, &pb.GetRequest{Key: "foo"})
+	followers := make([]*kv.Node, 0, len(status.Followers))
+	for _, follower := range status.Followers {
+		followers = append(followers, &kv.Node{
+			Id:      follower.ID,
+			Address: follower.Address,
+		})
+	}
+
+	response := &kv.StatusResponse{
+		MyId: &kv.Node{
+			Id:      status.MyId.ID,
+			Address: status.MyId.Address,
+		},
+		Leader: &kv.Node{
+			Id:      status.Leader.ID,
+			Address: status.Leader.Address,
+		},
+		Followers: followers,
+	}
+
+	return response, nil
+}
+
+func (s *DBServer) StartGRPCServer(address string) error {
+	listener, err := net.Listen("tcp", address)
 	if err != nil {
-		log.Fatalf("Could not get value: %v", err)
+		return fmt.Errorf("failed to listen on %s: %w", address, err)
 	}
-
-	if res.Found {
-		log.Printf("Found value: %s", res.Value)
-	} else {
-		log.Println("Value not found")
-	}
+	grpcServer := grpc.NewServer()
+	kv.RegisterKeyValueStoreServer(grpcServer, s)
+	fmt.Printf("gRPC server is running on %s\n", address)
+	return grpcServer.Serve(listener)
 }

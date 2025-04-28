@@ -213,6 +213,346 @@ func (x *GetResponse) GetFound() bool {
 	return false
 }
 
+type DeleteRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteRequest) Reset() {
+	*x = DeleteRequest{}
+	mi := &file_server_proto_kv_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteRequest) ProtoMessage() {}
+
+func (x *DeleteRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_server_proto_kv_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteRequest.ProtoReflect.Descriptor instead.
+func (*DeleteRequest) Descriptor() ([]byte, []int) {
+	return file_server_proto_kv_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *DeleteRequest) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+type DeleteResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteResponse) Reset() {
+	*x = DeleteResponse{}
+	mi := &file_server_proto_kv_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteResponse) ProtoMessage() {}
+
+func (x *DeleteResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_server_proto_kv_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteResponse.ProtoReflect.Descriptor instead.
+func (*DeleteResponse) Descriptor() ([]byte, []int) {
+	return file_server_proto_kv_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *DeleteResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+type StatusRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StatusRequest) Reset() {
+	*x = StatusRequest{}
+	mi := &file_server_proto_kv_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StatusRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StatusRequest) ProtoMessage() {}
+
+func (x *StatusRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_server_proto_kv_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StatusRequest.ProtoReflect.Descriptor instead.
+func (*StatusRequest) Descriptor() ([]byte, []int) {
+	return file_server_proto_kv_proto_rawDescGZIP(), []int{6}
+}
+
+type Node struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Address       string                 `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Node) Reset() {
+	*x = Node{}
+	mi := &file_server_proto_kv_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Node) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Node) ProtoMessage() {}
+
+func (x *Node) ProtoReflect() protoreflect.Message {
+	mi := &file_server_proto_kv_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Node.ProtoReflect.Descriptor instead.
+func (*Node) Descriptor() ([]byte, []int) {
+	return file_server_proto_kv_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *Node) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Node) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
+type StatusResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	MyId          *Node                  `protobuf:"bytes,1,opt,name=myId,proto3" json:"myId,omitempty"`
+	Leader        *Node                  `protobuf:"bytes,2,opt,name=leader,proto3" json:"leader,omitempty"`
+	Followers     []*Node                `protobuf:"bytes,3,rep,name=followers,proto3" json:"followers,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StatusResponse) Reset() {
+	*x = StatusResponse{}
+	mi := &file_server_proto_kv_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StatusResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StatusResponse) ProtoMessage() {}
+
+func (x *StatusResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_server_proto_kv_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StatusResponse.ProtoReflect.Descriptor instead.
+func (*StatusResponse) Descriptor() ([]byte, []int) {
+	return file_server_proto_kv_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *StatusResponse) GetMyId() *Node {
+	if x != nil {
+		return x.MyId
+	}
+	return nil
+}
+
+func (x *StatusResponse) GetLeader() *Node {
+	if x != nil {
+		return x.Leader
+	}
+	return nil
+}
+
+func (x *StatusResponse) GetFollowers() []*Node {
+	if x != nil {
+		return x.Followers
+	}
+	return nil
+}
+
+type AddNodeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	NodeId        string                 `protobuf:"bytes,1,opt,name=nodeId,proto3" json:"nodeId,omitempty"`
+	Address       string                 `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddNodeRequest) Reset() {
+	*x = AddNodeRequest{}
+	mi := &file_server_proto_kv_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddNodeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddNodeRequest) ProtoMessage() {}
+
+func (x *AddNodeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_server_proto_kv_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddNodeRequest.ProtoReflect.Descriptor instead.
+func (*AddNodeRequest) Descriptor() ([]byte, []int) {
+	return file_server_proto_kv_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *AddNodeRequest) GetNodeId() string {
+	if x != nil {
+		return x.NodeId
+	}
+	return ""
+}
+
+func (x *AddNodeRequest) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
+type AddNodeResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Error         string                 `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddNodeResponse) Reset() {
+	*x = AddNodeResponse{}
+	mi := &file_server_proto_kv_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddNodeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddNodeResponse) ProtoMessage() {}
+
+func (x *AddNodeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_server_proto_kv_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddNodeResponse.ProtoReflect.Descriptor instead.
+func (*AddNodeResponse) Descriptor() ([]byte, []int) {
+	return file_server_proto_kv_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *AddNodeResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *AddNodeResponse) GetError() string {
+	if x != nil {
+		return x.Error
+	}
+	return ""
+}
+
 var File_server_proto_kv_proto protoreflect.FileDescriptor
 
 const file_server_proto_kv_proto_rawDesc = "" +
@@ -229,10 +569,31 @@ const file_server_proto_kv_proto_rawDesc = "" +
 	"\x03key\x18\x01 \x01(\tR\x03key\"9\n" +
 	"\vGetResponse\x12\x14\n" +
 	"\x05value\x18\x01 \x01(\tR\x05value\x12\x14\n" +
-	"\x05found\x18\x02 \x01(\bR\x05found2i\n" +
+	"\x05found\x18\x02 \x01(\bR\x05found\"!\n" +
+	"\rDeleteRequest\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\"*\n" +
+	"\x0eDeleteResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"\x0f\n" +
+	"\rStatusRequest\"0\n" +
+	"\x04Node\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
+	"\aaddress\x18\x02 \x01(\tR\aaddress\"x\n" +
+	"\x0eStatusResponse\x12\x1c\n" +
+	"\x04myId\x18\x01 \x01(\v2\b.kv.NodeR\x04myId\x12 \n" +
+	"\x06leader\x18\x02 \x01(\v2\b.kv.NodeR\x06leader\x12&\n" +
+	"\tfollowers\x18\x03 \x03(\v2\b.kv.NodeR\tfollowers\"B\n" +
+	"\x0eAddNodeRequest\x12\x16\n" +
+	"\x06nodeId\x18\x01 \x01(\tR\x06nodeId\x12\x18\n" +
+	"\aaddress\x18\x02 \x01(\tR\aaddress\"A\n" +
+	"\x0fAddNodeResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
+	"\x05error\x18\x02 \x01(\tR\x05error2\x84\x02\n" +
 	"\rKeyValueStore\x12+\n" +
 	"\bSetValue\x12\x0e.kv.SetRequest\x1a\x0f.kv.SetResponse\x12+\n" +
-	"\bGetValue\x12\x0e.kv.GetRequest\x1a\x0f.kv.GetResponseB\vZ\tgen/go/kvb\x06proto3"
+	"\bGetValue\x12\x0e.kv.GetRequest\x1a\x0f.kv.GetResponse\x124\n" +
+	"\vDeleteValue\x12\x11.kv.DeleteRequest\x1a\x12.kv.DeleteResponse\x12/\n" +
+	"\x06Status\x12\x11.kv.StatusRequest\x1a\x12.kv.StatusResponse\x122\n" +
+	"\aAddNode\x12\x12.kv.AddNodeRequest\x1a\x13.kv.AddNodeResponseB\vZ\tgen/go/kvb\x06proto3"
 
 var (
 	file_server_proto_kv_proto_rawDescOnce sync.Once
@@ -246,23 +607,39 @@ func file_server_proto_kv_proto_rawDescGZIP() []byte {
 	return file_server_proto_kv_proto_rawDescData
 }
 
-var file_server_proto_kv_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_server_proto_kv_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_server_proto_kv_proto_goTypes = []any{
-	(*SetRequest)(nil),  // 0: kv.SetRequest
-	(*SetResponse)(nil), // 1: kv.SetResponse
-	(*GetRequest)(nil),  // 2: kv.GetRequest
-	(*GetResponse)(nil), // 3: kv.GetResponse
+	(*SetRequest)(nil),      // 0: kv.SetRequest
+	(*SetResponse)(nil),     // 1: kv.SetResponse
+	(*GetRequest)(nil),      // 2: kv.GetRequest
+	(*GetResponse)(nil),     // 3: kv.GetResponse
+	(*DeleteRequest)(nil),   // 4: kv.DeleteRequest
+	(*DeleteResponse)(nil),  // 5: kv.DeleteResponse
+	(*StatusRequest)(nil),   // 6: kv.StatusRequest
+	(*Node)(nil),            // 7: kv.Node
+	(*StatusResponse)(nil),  // 8: kv.StatusResponse
+	(*AddNodeRequest)(nil),  // 9: kv.AddNodeRequest
+	(*AddNodeResponse)(nil), // 10: kv.AddNodeResponse
 }
 var file_server_proto_kv_proto_depIdxs = []int32{
-	0, // 0: kv.KeyValueStore.SetValue:input_type -> kv.SetRequest
-	2, // 1: kv.KeyValueStore.GetValue:input_type -> kv.GetRequest
-	1, // 2: kv.KeyValueStore.SetValue:output_type -> kv.SetResponse
-	3, // 3: kv.KeyValueStore.GetValue:output_type -> kv.GetResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	7,  // 0: kv.StatusResponse.myId:type_name -> kv.Node
+	7,  // 1: kv.StatusResponse.leader:type_name -> kv.Node
+	7,  // 2: kv.StatusResponse.followers:type_name -> kv.Node
+	0,  // 3: kv.KeyValueStore.SetValue:input_type -> kv.SetRequest
+	2,  // 4: kv.KeyValueStore.GetValue:input_type -> kv.GetRequest
+	4,  // 5: kv.KeyValueStore.DeleteValue:input_type -> kv.DeleteRequest
+	6,  // 6: kv.KeyValueStore.Status:input_type -> kv.StatusRequest
+	9,  // 7: kv.KeyValueStore.AddNode:input_type -> kv.AddNodeRequest
+	1,  // 8: kv.KeyValueStore.SetValue:output_type -> kv.SetResponse
+	3,  // 9: kv.KeyValueStore.GetValue:output_type -> kv.GetResponse
+	5,  // 10: kv.KeyValueStore.DeleteValue:output_type -> kv.DeleteResponse
+	8,  // 11: kv.KeyValueStore.Status:output_type -> kv.StatusResponse
+	10, // 12: kv.KeyValueStore.AddNode:output_type -> kv.AddNodeResponse
+	8,  // [8:13] is the sub-list for method output_type
+	3,  // [3:8] is the sub-list for method input_type
+	3,  // [3:3] is the sub-list for extension type_name
+	3,  // [3:3] is the sub-list for extension extendee
+	0,  // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_server_proto_kv_proto_init() }
@@ -276,7 +653,7 @@ func file_server_proto_kv_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_server_proto_kv_proto_rawDesc), len(file_server_proto_kv_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

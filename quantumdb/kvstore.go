@@ -138,11 +138,12 @@ func (db *KVStore) AddNode(nodeID, addr string) error {
 	return nil
 }
 
-func (db *KVStore) Get(key string) (string, error) {
+func (db *KVStore) Get(key string) (string, bool, error) {
 	db.mu.Lock()
 	defer db.mu.Unlock()
 
-	return db.kv[key], nil
+	value, ok := db.kv[key]
+	return value, ok, nil
 }
 
 func (db *KVStore) Set(key, value string) error {
