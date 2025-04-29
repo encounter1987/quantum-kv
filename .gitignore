@@ -30,3 +30,4 @@ go.work.sum
 # compiled binary
 exec-quantum-kv
 
+data

@@ -1,6 +1,6 @@
 module github.com/encounter1987/quantum-kv
 
-go 1.24.1
+go 1.24.2
 
 require (
 	github.com/hashicorp/raft v1.7.3

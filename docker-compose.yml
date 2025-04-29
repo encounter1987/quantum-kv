@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  quantum-kv:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "11001:11001" # Expose gRPC port
+    volumes:
+      - ./data/node1:/app/data # Mount local directory for Raft storage with Node ID
+    command: >
+      ./quantum-kv
+      -grpcAddr=localhost:11001
+      -raddr=localhost:12001
+      -id=node1
+      /app/data
+    environment:
+      - GRPC_ADDR=localhost:11001
+      - RAFT_ADDR=localhost:12001
+      - NODE_ID=node1
+    restart: unless-stopped
