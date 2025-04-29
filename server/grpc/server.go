@@ -10,7 +10,7 @@ import (
 )
 
 type DBServer struct {
-	kv.UnimplementedKeyValueStoreServer
+	kv.KeyValueStoreServer
 	KVStore *quantumdb.KVStore
 }
 

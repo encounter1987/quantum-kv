@@ -1,22 +1,76 @@
 version: '3.8'
 
 services:
-  quantum-kv:
+  consul:
+    image: consul:1.14.5
+    ports:
+      - "8500:8500"
+    command: agent -dev -client=0.0.0.0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8500/v1/status/leader"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  quantum-kv-node1:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "11001:11001" # Expose gRPC port
+      - "11001:11001"
     volumes:
-      - ./data/node1:/app/data # Mount local directory for Raft storage with Node ID
+      - ./data/node1:/app/data
+    entrypoint: ["/app/wait-for-consul.sh", "consul:8500", "--", "./quantum-kv"]
     command: >
-      ./quantum-kv
-      -grpcAddr=localhost:11001
+      -grpcAddr=0.0.0.0:11001
       -raddr=localhost:12001
       -id=node1
       /app/data
     environment:
-      - GRPC_ADDR=localhost:11001
-      - RAFT_ADDR=localhost:12001
-      - NODE_ID=node1
+      - CONSUL_HTTP_ADDR=consul:8500
+    depends_on:
+      consul:
+        condition: service_healthy
+    restart: unless-stopped
+
+  quantum-kv-node2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "11002:11001"
+    volumes:
+      - ./data/node2:/app/data
+    entrypoint: ["/app/wait-for-consul.sh", "consul:8500", "--", "./quantum-kv"]
+    command: >
+      -grpcAddr=0.0.0.0:11001
+      -raddr=localhost:12002
+      -id=node2
+      /app/data
+    environment:
+      - CONSUL_HTTP_ADDR=consul:8500
+    depends_on:
+      consul:
+        condition: service_healthy
+    restart: unless-stopped
+
+  quantum-kv-node3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "11003:11001"
+    volumes:
+      - ./data/node3:/app/data
+    entrypoint: ["/app/wait-for-consul.sh", "consul:8500", "--", "./quantum-kv"]
+    command: >
+      -grpcAddr=0.0.0.0:11001
+      -raddr=localhost:12003
+      -id=node3
+      /app/data
+    environment:
+      - CONSUL_HTTP_ADDR=consul:8500
+    depends_on:
+      consul:
+        condition: service_healthy
     restart: unless-stopped
