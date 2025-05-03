@@ -1,17 +1,6 @@
 version: '3.8'
 
 services:
-  consul:
-    image: consul:1.14.5
-    ports:
-      - "8500:8500"
-    command: agent -dev -client=0.0.0.0
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8500/v1/status/leader"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   quantum-kv-node1:
     build:
       context: .
@@ -21,17 +10,12 @@ services:
       - "12001:12001"
     volumes:
       - ./data/node1:/app/data
-    entrypoint: ["/app/wait-for-consul.sh", "consul:8500", "--", "./quantum-kv"]
     command: >
+      ./quantum-kv
       -grpcAddr=0.0.0.0:11001
       -raddr=quantum-kv-node1:12001
       -id=node1
       /app/data
-    environment:
-      - CONSUL_HTTP_ADDR=consul:8500
-    depends_on:
-      consul:
-        condition: service_healthy
     tty: false
     stdin_open: false
     #restart: unless-stopped
@@ -45,18 +29,13 @@ services:
       - "12002:12001"
     volumes:
       - ./data/node2:/app/data
-    entrypoint: ["/app/wait-for-consul.sh", "consul:8500", "--", "./quantum-kv"]
     command: >
+      ./quantum-kv
       -grpcAddr=0.0.0.0:11001
       -raddr=quantum-kv-node2:12001
       -join=quantum-kv-node1:11001
       -id=node2
       /app/data
-    environment:
-      - CONSUL_HTTP_ADDR=consul:8500
-    depends_on:
-      consul:
-        condition: service_healthy
     tty: false
     stdin_open: false
     restart: unless-stopped
@@ -67,20 +46,16 @@ services:
       dockerfile: Dockerfile
     ports:
       - "11003:11001"
+      - "12003:12001"
     volumes:
       - ./data/node3:/app/data
-    entrypoint: ["/app/wait-for-consul.sh", "consul:8500", "--", "./quantum-kv"]
     command: >
+      ./quantum-kv
       -grpcAddr=0.0.0.0:11001
-      -raddr=quantum-kv-node3:12003
+      -raddr=quantum-kv-node3:12001
       -join=quantum-kv-node1:11001
       -id=node3
       /app/data
-    environment:
-      - CONSUL_HTTP_ADDR=consul:8500
-    depends_on:
-      consul:
-        condition: service_healthy
     tty: false
     stdin_open: false
     restart: unless-stopped

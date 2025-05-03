@@ -83,26 +83,6 @@ func main() {
 	log.Println("quantum-kv exiting")
 }
 
-//func joinRaftCluster(raftAddr, grpcAddr string, liveRaftNodes []string) error {
-//
-//	for _, liveRaftNode := range liveRaftNodes {
-//		if liveRaftNode == raftAddr {
-//			continue
-//		}
-//		err := join(liveRaftNode, grpcAddr, nodeID)
-//		if err != nil {
-//			return fmt.Errorf("failed to join Raft cluster: %w", err)
-//		} else {
-//			log.Printf("Joined Raft cluster at %s", liveRaftNode)
-//			return nil
-//		}
-//	}
-//
-//	log.Printf("No other nodes found in the cluster, starting the first one")
-//
-//	return nil
-//}
-
 func join(joinAddr, raftAddr, nodeID string) error {
 	conn, err := grpc.Dial(joinAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {

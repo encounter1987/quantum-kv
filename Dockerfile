@@ -33,8 +33,6 @@ WORKDIR /app
 # Install curl
 RUN apk add --no-cache curl
 
-COPY --from=builder /app/wait-for-consul.sh /app/wait-for-consul.sh
-
 # Copy the binary from the builder stage
 COPY --from=builder /app/quantum-kv .
 
