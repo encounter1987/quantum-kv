@@ -18,12 +18,13 @@ services:
       dockerfile: Dockerfile
     ports:
       - "11001:11001"
+      - "12001:12001"
     volumes:
       - ./data/node1:/app/data
     entrypoint: ["/app/wait-for-consul.sh", "consul:8500", "--", "./quantum-kv"]
     command: >
       -grpcAddr=0.0.0.0:11001
-      -raddr=localhost:12001
+      -raddr=quantum-kv-node1:12001
       -id=node1
       /app/data
     environment:
@@ -31,7 +32,9 @@ services:
     depends_on:
       consul:
         condition: service_healthy
-    restart: unless-stopped
+    tty: false
+    stdin_open: false
+    #restart: unless-stopped
 
   quantum-kv-node2:
     build:
@@ -39,12 +42,14 @@ services:
       dockerfile: Dockerfile
     ports:
       - "11002:11001"
+      - "12002:12001"
     volumes:
       - ./data/node2:/app/data
     entrypoint: ["/app/wait-for-consul.sh", "consul:8500", "--", "./quantum-kv"]
     command: >
       -grpcAddr=0.0.0.0:11001
-      -raddr=localhost:12002
+      -raddr=quantum-kv-node2:12001
+      -join=quantum-kv-node1:11001
       -id=node2
       /app/data
     environment:
@@ -52,6 +57,8 @@ services:
     depends_on:
       consul:
         condition: service_healthy
+    tty: false
+    stdin_open: false
     restart: unless-stopped
 
   quantum-kv-node3:
@@ -65,7 +72,8 @@ services:
     entrypoint: ["/app/wait-for-consul.sh", "consul:8500", "--", "./quantum-kv"]
     command: >
       -grpcAddr=0.0.0.0:11001
-      -raddr=localhost:12003
+      -raddr=quantum-kv-node3:12003
+      -join=quantum-kv-node1:11001
       -id=node3
       /app/data
     environment:
@@ -73,4 +81,6 @@ services:
     depends_on:
       consul:
         condition: service_healthy
+    tty: false
+    stdin_open: false
     restart: unless-stopped

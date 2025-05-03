@@ -83,6 +83,6 @@ func (s *DBServer) StartGRPCServer(address string) error {
 	}
 	grpcServer := grpc.NewServer()
 	kv.RegisterKeyValueStoreServer(grpcServer, s)
-	fmt.Printf("gRPC server is running on %s\n", address)
+	fmt.Printf("GRPC server is running on %s\n", address)
 	return grpcServer.Serve(listener)
 }

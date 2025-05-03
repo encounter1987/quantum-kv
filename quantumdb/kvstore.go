@@ -190,6 +190,7 @@ func (db *KVStore) Delete(key string) error {
 }
 
 func (db *KVStore) Status() (NodeStatus, error) {
+	log.Printf("getting status of the cluster")
 	leaderServerAddr, leaderId := db.raft.LeaderWithID()
 	leader := Node{
 		ID:      string(leaderId),
