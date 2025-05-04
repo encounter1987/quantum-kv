@@ -155,17 +155,23 @@ func (db *KVStore) Set(key, value string) error {
 		return fmt.Errorf("not the leader")
 	}
 
-	cmd := &command{
-		Type:  PUT,
-		Key:   key,
-		Value: value,
+	keyValue := make(map[string]string)
+	keyValue[key] = value
+	data, err := json.Marshal(keyValue)
+	if err != nil {
+		return fmt.Errorf("error marshalling command data: %s", err)
 	}
-	data, err := json.Marshal(cmd)
+
+	cmd := &command{
+		Type: PUT,
+		Data: data,
+	}
+	cmdData, err := json.Marshal(cmd)
 	if err != nil {
 		return fmt.Errorf("error marshalling command: %s", err)
 	}
 
-	future := db.raft.Apply(data, raftTimeout)
+	future := db.raft.Apply(cmdData, raftTimeout)
 
 	return future.Error()
 }
@@ -177,7 +183,7 @@ func (db *KVStore) Delete(key string) error {
 
 	cmd := &command{
 		Type: DELETE,
-		Key:  key,
+		Data: []byte(key),
 	}
 	data, err := json.Marshal(cmd)
 	if err != nil {

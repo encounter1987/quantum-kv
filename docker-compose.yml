@@ -16,9 +16,14 @@ services:
       -raddr=quantum-kv-node1:12001
       -id=node1
       /app/data
+    deploy:
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: "100M"
     tty: false
     stdin_open: false
-    #restart: unless-stopped
+    restart: unless-stopped
 
   quantum-kv-node2:
     build:
@@ -36,6 +41,11 @@ services:
       -join=quantum-kv-node1:11001
       -id=node2
       /app/data
+    deploy:
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: "100M"
     tty: false
     stdin_open: false
     restart: unless-stopped
@@ -56,6 +66,11 @@ services:
       -join=quantum-kv-node1:11001
       -id=node3
       /app/data
+    deploy:
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: "100M"
     tty: false
     stdin_open: false
     restart: unless-stopped

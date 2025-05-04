@@ -8,7 +8,6 @@ const (
 )
 
 type command struct {
-	Type  Type   `json:"op,omitempty"`
-	Key   string `json:"key,omitempty"`
-	Value string `json:"value,omitempty"`
+	Type Type   `json:"op,omitempty"`
+	Data []byte `json:"data,omitempty"`
 }

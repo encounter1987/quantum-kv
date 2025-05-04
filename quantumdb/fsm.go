@@ -18,9 +18,22 @@ func (f *fsm) Apply(l *raft.Log) interface{} {
 
 	switch cmd.Type {
 	case PUT:
-		return f.applyPut(cmd.Key, cmd.Value)
+		// Unmarshal the data into a key-value pair
+		kvData := make(map[string]string)
+		if err := json.Unmarshal(cmd.Data, &kvData); err != nil {
+			return fmt.Errorf("error unmarshalling command data: %s", err)
+		}
+
+		var key, value string
+		for key, value = range kvData {
+			break
+		}
+
+		return f.applyPut(key, value)
+
 	case DELETE:
-		return f.applyDelete(cmd.Key)
+		// Unmarshal the data into a key
+		return f.applyDelete(string(cmd.Data))
 	default:
 		return fmt.Errorf("unknown command type: %s", cmd.Type)
 	}
