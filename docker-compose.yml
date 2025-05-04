@@ -7,14 +7,13 @@ services:
       dockerfile: Dockerfile
     ports:
       - "11001:11001"
-      - "12001:12001"
     volumes:
       - ./data/node1:/app/data
     command: >
       ./quantum-kv
       -grpcAddr=0.0.0.0:11001
       -raddr=quantum-kv-node1:12001
-      -id=node1
+      -id=quantum-kv-node1
       /app/data
     deploy:
       resources:
@@ -31,7 +30,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "11002:11001"
-      - "12002:12001"
     volumes:
       - ./data/node2:/app/data
     command: >
@@ -39,7 +37,7 @@ services:
       -grpcAddr=0.0.0.0:11001
       -raddr=quantum-kv-node2:12001
       -join=quantum-kv-node1:11001
-      -id=node2
+      -id=quantum-kv-node2
       /app/data
     deploy:
       resources:
@@ -56,7 +54,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "11003:11001"
-      - "12003:12001"
     volumes:
       - ./data/node3:/app/data
     command: >
@@ -64,7 +61,7 @@ services:
       -grpcAddr=0.0.0.0:11001
       -raddr=quantum-kv-node3:12001
       -join=quantum-kv-node1:11001
-      -id=node3
+      -id=quantum-kv-node3
       /app/data
     deploy:
       resources:

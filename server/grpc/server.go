@@ -21,7 +21,9 @@ func New(store *quantumdb.KVStore) *DBServer {
 }
 
 func (s *DBServer) SetValue(ctx context.Context, req *kv.SetRequest) (*kv.SetResponse, error) {
-	s.KVStore.Set(req.Key, req.Value)
+	if err := s.KVStore.Set(req.Key, req.Value); err != nil {
+		return &kv.SetResponse{Success: false}, err
+	}
 
 	return &kv.SetResponse{Success: true}, nil
 }
@@ -33,7 +35,9 @@ func (s *DBServer) GetValue(ctx context.Context, req *kv.GetRequest) (*kv.GetRes
 }
 
 func (s *DBServer) DeleteValue(ctx context.Context, req *kv.DeleteRequest) (*kv.DeleteResponse, error) {
-	s.KVStore.Delete(req.Key)
+	if err := s.KVStore.Delete(req.Key); err != nil {
+		return &kv.DeleteResponse{Success: false}, err
+	}
 
 	return &kv.DeleteResponse{Success: true}, nil
 }
