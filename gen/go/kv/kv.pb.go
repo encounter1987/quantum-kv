@@ -587,11 +587,11 @@ const file_server_proto_kv_proto_rawDesc = "" +
 	"\aaddress\x18\x02 \x01(\tR\aaddress\"A\n" +
 	"\x0fAddNodeResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
-	"\x05error\x18\x02 \x01(\tR\x05error2\x84\x02\n" +
+	"\x05error\x18\x02 \x01(\tR\x05error2\x82\x02\n" +
 	"\rKeyValueStore\x12+\n" +
 	"\bSetValue\x12\x0e.kv.SetRequest\x1a\x0f.kv.SetResponse\x12+\n" +
-	"\bGetValue\x12\x0e.kv.GetRequest\x1a\x0f.kv.GetResponse\x124\n" +
-	"\vDeleteValue\x12\x11.kv.DeleteRequest\x1a\x12.kv.DeleteResponse\x12/\n" +
+	"\bGetValue\x12\x0e.kv.GetRequest\x1a\x0f.kv.GetResponse\x122\n" +
+	"\tDeleteKey\x12\x11.kv.DeleteRequest\x1a\x12.kv.DeleteResponse\x12/\n" +
 	"\x06Status\x12\x11.kv.StatusRequest\x1a\x12.kv.StatusResponse\x122\n" +
 	"\aAddNode\x12\x12.kv.AddNodeRequest\x1a\x13.kv.AddNodeResponseB\vZ\tgen/go/kvb\x06proto3"
 
@@ -627,12 +627,12 @@ var file_server_proto_kv_proto_depIdxs = []int32{
 	7,  // 2: kv.StatusResponse.followers:type_name -> kv.Node
 	0,  // 3: kv.KeyValueStore.SetValue:input_type -> kv.SetRequest
 	2,  // 4: kv.KeyValueStore.GetValue:input_type -> kv.GetRequest
-	4,  // 5: kv.KeyValueStore.DeleteValue:input_type -> kv.DeleteRequest
+	4,  // 5: kv.KeyValueStore.DeleteKey:input_type -> kv.DeleteRequest
 	6,  // 6: kv.KeyValueStore.Status:input_type -> kv.StatusRequest
 	9,  // 7: kv.KeyValueStore.AddNode:input_type -> kv.AddNodeRequest
 	1,  // 8: kv.KeyValueStore.SetValue:output_type -> kv.SetResponse
 	3,  // 9: kv.KeyValueStore.GetValue:output_type -> kv.GetResponse
-	5,  // 10: kv.KeyValueStore.DeleteValue:output_type -> kv.DeleteResponse
+	5,  // 10: kv.KeyValueStore.DeleteKey:output_type -> kv.DeleteResponse
 	8,  // 11: kv.KeyValueStore.Status:output_type -> kv.StatusResponse
 	10, // 12: kv.KeyValueStore.AddNode:output_type -> kv.AddNodeResponse
 	8,  // [8:13] is the sub-list for method output_type

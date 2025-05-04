@@ -19,11 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	KeyValueStore_SetValue_FullMethodName    = "/kv.KeyValueStore/SetValue"
-	KeyValueStore_GetValue_FullMethodName    = "/kv.KeyValueStore/GetValue"
-	KeyValueStore_DeleteValue_FullMethodName = "/kv.KeyValueStore/DeleteValue"
-	KeyValueStore_Status_FullMethodName      = "/kv.KeyValueStore/Status"
-	KeyValueStore_AddNode_FullMethodName     = "/kv.KeyValueStore/AddNode"
+	KeyValueStore_SetValue_FullMethodName  = "/kv.KeyValueStore/SetValue"
+	KeyValueStore_GetValue_FullMethodName  = "/kv.KeyValueStore/GetValue"
+	KeyValueStore_DeleteKey_FullMethodName = "/kv.KeyValueStore/DeleteKey"
+	KeyValueStore_Status_FullMethodName    = "/kv.KeyValueStore/Status"
+	KeyValueStore_AddNode_FullMethodName   = "/kv.KeyValueStore/AddNode"
 )
 
 // KeyValueStoreClient is the client API for KeyValueStore service.
@@ -32,7 +32,7 @@ const (
 type KeyValueStoreClient interface {
 	SetValue(ctx context.Context, in *SetRequest, opts ...grpc.CallOption) (*SetResponse, error)
 	GetValue(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
-	DeleteValue(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
+	DeleteKey(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
 	Status(ctx context.Context, in *StatusRequest, opts ...grpc.CallOption) (*StatusResponse, error)
 	AddNode(ctx context.Context, in *AddNodeRequest, opts ...grpc.CallOption) (*AddNodeResponse, error)
 }
@@ -65,10 +65,10 @@ func (c *keyValueStoreClient) GetValue(ctx context.Context, in *GetRequest, opts
 	return out, nil
 }
 
-func (c *keyValueStoreClient) DeleteValue(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error) {
+func (c *keyValueStoreClient) DeleteKey(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(DeleteResponse)
-	err := c.cc.Invoke(ctx, KeyValueStore_DeleteValue_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, KeyValueStore_DeleteKey_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +101,7 @@ func (c *keyValueStoreClient) AddNode(ctx context.Context, in *AddNodeRequest, o
 type KeyValueStoreServer interface {
 	SetValue(context.Context, *SetRequest) (*SetResponse, error)
 	GetValue(context.Context, *GetRequest) (*GetResponse, error)
-	DeleteValue(context.Context, *DeleteRequest) (*DeleteResponse, error)
+	DeleteKey(context.Context, *DeleteRequest) (*DeleteResponse, error)
 	Status(context.Context, *StatusRequest) (*StatusResponse, error)
 	AddNode(context.Context, *AddNodeRequest) (*AddNodeResponse, error)
 	mustEmbedUnimplementedKeyValueStoreServer()
@@ -120,8 +120,8 @@ func (UnimplementedKeyValueStoreServer) SetValue(context.Context, *SetRequest) (
 func (UnimplementedKeyValueStoreServer) GetValue(context.Context, *GetRequest) (*GetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetValue not implemented")
 }
-func (UnimplementedKeyValueStoreServer) DeleteValue(context.Context, *DeleteRequest) (*DeleteResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteValue not implemented")
+func (UnimplementedKeyValueStoreServer) DeleteKey(context.Context, *DeleteRequest) (*DeleteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteKey not implemented")
 }
 func (UnimplementedKeyValueStoreServer) Status(context.Context, *StatusRequest) (*StatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Status not implemented")
@@ -186,20 +186,20 @@ func _KeyValueStore_GetValue_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _KeyValueStore_DeleteValue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _KeyValueStore_DeleteKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(KeyValueStoreServer).DeleteValue(ctx, in)
+		return srv.(KeyValueStoreServer).DeleteKey(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: KeyValueStore_DeleteValue_FullMethodName,
+		FullMethod: KeyValueStore_DeleteKey_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyValueStoreServer).DeleteValue(ctx, req.(*DeleteRequest))
+		return srv.(KeyValueStoreServer).DeleteKey(ctx, req.(*DeleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -256,8 +256,8 @@ var KeyValueStore_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _KeyValueStore_GetValue_Handler,
 		},
 		{
-			MethodName: "DeleteValue",
-			Handler:    _KeyValueStore_DeleteValue_Handler,
+			MethodName: "DeleteKey",
+			Handler:    _KeyValueStore_DeleteKey_Handler,
 		},
 		{
 			MethodName: "Status",

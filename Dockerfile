@@ -12,18 +12,14 @@ RUN go mod download
 # Install the necessary tools for building the application
 RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest && \
     go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+RUN apk add --no-cache protobuf
 
 # Copy the rest of the application code
 COPY . .
 
-RUN chmod +x /app/wait-for-consul.sh
-RUN apk add --no-cache protobuf
-
 # Compile the protobuf files
-RUN protoc --go_out=. --go-grpc_out=. -I . server/proto/kv.proto
-
-# Build the Go application
-RUN go build -o quantum-kv main.go
+RUN protoc --go_out=. --go-grpc_out=. -I . server/proto/kv.proto && \
+    go build -o quantum-kv main.go
 
 FROM alpine
 

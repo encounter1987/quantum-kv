@@ -20,6 +20,8 @@ services:
         limits:
           cpus: "0.2"
           memory: "100M"
+    environment:
+      ENV: docker-desktop
     tty: false
     stdin_open: false
     restart: unless-stopped
@@ -44,6 +46,8 @@ services:
         limits:
           cpus: "0.2"
           memory: "100M"
+    environment:
+      ENV: docker-desktop
     tty: false
     stdin_open: false
     restart: unless-stopped
@@ -68,6 +72,8 @@ services:
         limits:
           cpus: "0.2"
           memory: "100M"
+    environment:
+      ENV: docker-desktop
     tty: false
     stdin_open: false
     restart: unless-stopped

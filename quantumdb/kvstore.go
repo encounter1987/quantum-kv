@@ -152,14 +152,14 @@ func (db *KVStore) Get(key string) (string, bool, error) {
 
 func (db *KVStore) Set(key, value string) error {
 	if db.raft.State() != raft.Leader {
-		return fmt.Errorf("not the leader")
+		return ERROR_NOT_A_LEADER
 	}
 
 	keyValue := make(map[string]string)
 	keyValue[key] = value
 	data, err := json.Marshal(keyValue)
 	if err != nil {
-		return fmt.Errorf("error marshalling command data: %s", err)
+		return ERROR_NOT_A_LEADER
 	}
 
 	cmd := &command{
@@ -178,7 +178,7 @@ func (db *KVStore) Set(key, value string) error {
 
 func (db *KVStore) Delete(key string) error {
 	if db.raft.State() != raft.Leader {
-		return fmt.Errorf("not the leader")
+		return ERROR_NOT_A_LEADER
 	}
 
 	cmd := &command{
@@ -193,6 +193,11 @@ func (db *KVStore) Delete(key string) error {
 	future := db.raft.Apply(data, raftTimeout)
 
 	return future.Error()
+}
+
+func (db *KVStore) GetLeader() (string, error) {
+	_, leaderId := db.raft.LeaderWithID()
+	return string(leaderId), nil
 }
 
 func (db *KVStore) Status() (NodeStatus, error) {
