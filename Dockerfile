@@ -26,9 +26,6 @@ FROM alpine
 # Set the working directory inside the container
 WORKDIR /app
 
-# Install curl
-RUN apk add --no-cache curl
-
 # Copy the binary from the builder stage
 COPY --from=builder /app/quantum-kv .
 
